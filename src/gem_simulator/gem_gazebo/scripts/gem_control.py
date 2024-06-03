@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 import math
 import numpy as np
@@ -30,16 +30,16 @@ class GEMController(object):
         self.right_rear_link = None
 
         (left_steer_link, left_steer_controller, left_front_wheel_controller, self.left_front_inv_circ) = \
-            self.get_front_wheel_params("~left_front_wheel/")
+            self.get_front_wheel_params("/left_front_wheel/")
 
         (right_steer_link, right_steer_controller, right_front_wheel_controller, self.right_front_inv_circ) = \
-            self.get_front_wheel_params("~right_front_wheel/")
+            self.get_front_wheel_params("/right_front_wheel/")
 
         (left_rear_link, left_rear_wheel_controller, self.left_rear_inv_circ) =  \
-            self.get_rear_wheel_params("~left_rear_wheel/")
+            self.get_rear_wheel_params("/left_rear_wheel/")
 
         (right_rear_link, right_rear_wheel_controller, self.right_rear_inv_circ) =  \
-            self.get_rear_wheel_params("~right_rear_wheel/")
+            self.get_rear_wheel_params("/right_rear_wheel/")
 
         self.right_rear_link = right_rear_link
 
@@ -106,7 +106,6 @@ class GEMController(object):
             t = rospy.get_time()
             delta_t = t - last_time
             last_time = t
-
             if (self.cmd_timeout > 0.0 and (t - self.last_cmd_time > self.cmd_timeout)):
 
                 steer_ang_changed, center_y = self.control_steering(self.last_steer_ang, 0.0, 0.001)
@@ -124,6 +123,7 @@ class GEMController(object):
                 steer_ang_changed, center_y = self.control_steering(steer_ang, steer_ang_vel, delta_t)
 
                 self.control_wheels(speed, accel, delta_t, steer_ang_changed, center_y)
+                print(delta_t)
 
             # # change is bigger than 0.1 degree
             # if(np.abs(self.theta_left - self.theta_left_old) >= 0.0015):
